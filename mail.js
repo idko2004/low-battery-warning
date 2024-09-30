@@ -21,6 +21,7 @@ if(config.email === undefined
 }
 
 
+const fs = require('fs');
 const mailer = require('nodemailer');
 
 const transporter = mailer.createTransport(
@@ -50,7 +51,7 @@ function sendEmail(whoToSend, emailName, emailHtmlContent)
 
 		const mailOptions =
 		{
-			from: process.env.EMAIL_USER,
+			from: config.email.sender.user,
 			to: whoToSend,
 			subject: emailName,
 			html: emailHtmlContent
@@ -65,7 +66,7 @@ function sendEmail(whoToSend, emailName, emailHtmlContent)
 			}
 			else
 			{
-				console.log('//Email mandado', emailName);
+				console.log('[INFO] Email sent', emailName);
 				resolve();
 			}
 		});
@@ -73,9 +74,22 @@ function sendEmail(whoToSend, emailName, emailHtmlContent)
 	});
 }
 
-function prepareAndSendEmail(percentage)
+async function prepareAndSendEmail(percentage)
 {
+	try
+	{
+		let htmlFile = await fs.promises.readFile(config.email.contents.html_file);
+		htmlFile = htmlFile.toString();
+		htmlFile = htmlFile.replace("%%", `${percentage}%`);
 
+		let title = config.email.contents.title.replace("%%", `${percentage}%`);
+
+		sendEmail(config.email.receiver.user, title, htmlFile);
+	}
+	catch
+	{
+		console.log("[ERROR] Failed to load html file.");
+	}
 }
 
 module.exports =

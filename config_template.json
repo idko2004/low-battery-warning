@@ -12,6 +12,11 @@
 		"receiver":
 		{
 			"user": "receiver@emailprovider.com"
+		},
+		"contents":
+		{
+			"html_file": "email_contents.html",
+			"title": "Device at %% of battery. Charge it now!"
 		}
 	}
 }

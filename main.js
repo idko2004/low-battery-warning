@@ -9,6 +9,7 @@ catch
 	return;
 }
 
+const email = require('./mail');
 const {exec} = require('child_process');
 
 async function monitorBattery()
@@ -24,6 +25,7 @@ async function monitorBattery()
 	&& status.plugged == "UNPLUGGED")
 	{
 		console.log(`[INFO] The device is at ${percentage}% of charge, please plug it in.`);
+		email.prepareAndSendEmail(status.percentage);
 	}
 	else
 	{

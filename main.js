@@ -24,7 +24,7 @@ async function monitorBattery()
 	if(status.percentage <= config.battery_percentage_threshold
 	&& status.plugged == "UNPLUGGED")
 	{
-		console.log(`[INFO] The device is at ${percentage}% of charge, please plug it in.`);
+		console.log(`[INFO] The device is at ${status.percentage}% of charge, please plug it in.`);
 		email.prepareAndSendEmail(status.percentage);
 	}
 	else

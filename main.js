@@ -1,13 +1,15 @@
-let UPDATE_RATE_IN_MS = 3_000;
-let BATTERY_PERCENTAGE_THRESHOLD = process.env.BATTERY_PERCENTAGE_THRESHOLD || 30;
-//let UPDATE_RATE_IN_MS = process.env.UPDATE_RATE_IN_MS || 3_600_000; //1 hora
+let config;
+try
+{
+	config = require('config.json');
+}
+catch
+{
+	console.log("Config file not found.\n\nCreate a file with the name \"config.json\" and copy the contents of \"config_template.json\" into it.\nPlease set the values to your liking, and don't forget to paste your email credentials.");
+	return;
+}
 
 const {exec} = require('child_process');
-
-function sendEmail(percentage)
-{
-	console.log(`The device is at ${percentage}% of charge, please plug it in.`);
-}
 
 async function monitorBattery()
 {
@@ -18,10 +20,10 @@ async function monitorBattery()
 		return;
 	}
 
-	if(status.percentage <= BATTERY_PERCENTAGE_THRESHOLD
+	if(status.percentage <= config.battery_percentage_threshold
 	&& status.plugged == "UNPLUGGED")
 	{
-		sendEmail(status.percentage);
+		console.log(`[INFO] The device is at ${percentage}% of charge, please plug it in.`);
 	}
 	else
 	{
@@ -31,10 +33,12 @@ async function monitorBattery()
 
 function getBatteryStatus()
 {
+	/*
 	return new Promise((good, bad) =>
 	{
 		good({percentage: 30, plugged: "UNPLUGGED"});
 	});
+	*/
 	return new Promise((good, bad) =>
 	{
 		exec("termux-battery-status", (stderr, stdout) =>
@@ -63,6 +67,6 @@ function getBatteryStatus()
 setInterval(() => 
 {
 	monitorBattery();
-}, UPDATE_RATE_IN_MS);
+}, config.update_rate_in_ms);
 
 monitorBattery();

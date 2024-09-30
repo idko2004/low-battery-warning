@@ -1,0 +1,17 @@
+{
+	"update_rate_in_ms": 3600000,
+	"battery_percentage_threshold": 30,
+	"email":
+	{
+		"sender":
+		{
+			"host": "your.emailprovider.com",
+			"user": "sender@emailprovider.com",
+			"password": "i-hope-this-is-not-your-personal-account"
+		},
+		"receiver":
+		{
+			"user": "receiver@emailprovider.com"
+		}
+	}
+}

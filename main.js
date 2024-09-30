@@ -33,6 +33,10 @@ function getBatteryStatus()
 {
 	return new Promise((good, bad) =>
 	{
+		good({percentage: 30, plugged: "UNPLUGGED"});
+	}
+	return new Promise((good, bad) =>
+	{
 		exec("termux-battery-status", (stderr, stdout) =>
 		{
 			//console.log("stderr: ", stderr);
